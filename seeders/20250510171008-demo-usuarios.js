@@ -6,7 +6,8 @@ module.exports = {
       {
         nombre: "Administrador",
         email: "admin@farmacia.com",
-        password: "123456", // ¡Reemplaza con hash real en producción!
+        password:
+          "$2b$10$qMtkxUgxReShpXpT6xRmv.zmqrF7kBHSyxVCv0mHMJ1/yLLiw2C2S",
         rol: "admin",
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -14,7 +15,8 @@ module.exports = {
       {
         nombre: "Juan Pérez",
         email: "juan@farmacia.com",
-        password: "123456",
+        password:
+          "$2b$10$qMtkxUgxReShpXpT6xRmv.zmqrF7kBHSyxVCv0mHMJ1/yLLiw2C2S",
         rol: "usuario",
         createdAt: new Date(),
         updatedAt: new Date(),
