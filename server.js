@@ -230,7 +230,7 @@ app.delete(
 app.get(
     "/ordencompras",
     authenticateJWT,
-    authorizeRoles(["admin"]),
+    authorizeRoles(["admin", "usuario"]),
     async (req, res) => {
         try {
             const ordenes = await OrdenCompra.findAll();
