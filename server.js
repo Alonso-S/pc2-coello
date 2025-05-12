@@ -13,7 +13,6 @@ app.use(express.json());
 
 const SECRET_KEY = process.env.SECRET_KEY || "secretkey";
 
-// Middleware de autenticación
 const authenticateJWT = (req, res, next) => {
     const token = req.header("Authorization")?.split(" ")[1];
     if (!token) return res.status(403).send("Acceso denegado");
@@ -25,7 +24,6 @@ const authenticateJWT = (req, res, next) => {
     });
 };
 
-// Middleware de autorización por rol
 const authorizeRoles = (roles) => {
     return (req, res, next) => {
         if (!roles.includes(req.user.rol)) {
@@ -35,7 +33,6 @@ const authorizeRoles = (roles) => {
     };
 };
 
-// Middleware para validación de campos no nulos
 const validateFields = (requiredFields) => {
     return (req, res, next) => {
         const missingFields = requiredFields.filter((field) =>
@@ -52,7 +49,6 @@ const validateFields = (requiredFields) => {
     };
 };
 
-// Registro
 app.post("/register", async (req, res) => {
     const { nombre, email, password, rol } = req.body;
 
@@ -71,7 +67,6 @@ app.post("/register", async (req, res) => {
     }
 });
 
-// Login
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
@@ -95,15 +90,9 @@ app.post("/login", async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 });
-
-// Logout (cliente elimina token)
 app.post("/logout", authenticateJWT, (req, res) => {
     res.send("Sesión cerrada");
 });
-
-//////////////////////////
-// CRUD Medicamentos
-//////////////////////////
 
 app.get("/medicamentos", authenticateJWT, async (req, res) => {
     try {
@@ -118,7 +107,7 @@ app.post(
     "/medicamentos",
     authenticateJWT,
     authorizeRoles(["admin"]),
-    validateFields(["descripcionMed", "precioVentaUni", "stock"]), // Validación de campos obligatorios
+    validateFields(["descripcionMed", "precioVentaUni", "stock"]),
     async (req, res) => {
         const { descripcionMed, precioVentaUni, stock } = req.body;
         try {
@@ -138,7 +127,7 @@ app.put(
     "/medicamentos/:id",
     authenticateJWT,
     authorizeRoles(["admin"]),
-    validateFields(["descripcionMed", "precioVentaUni", "stock"]), // Validación de campos obligatorios
+    validateFields(["descripcionMed", "precioVentaUni", "stock"]),
     async (req, res) => {
         const { id } = req.params;
         const { descripcionMed, precioVentaUni, stock } = req.body;
@@ -181,10 +170,6 @@ app.delete(
     },
 );
 
-//////////////////////////
-// CRUD Usuarios
-//////////////////////////
-
 app.get(
     "/usuarios",
     authenticateJWT,
@@ -203,7 +188,7 @@ app.put(
     "/usuarios/:id",
     authenticateJWT,
     authorizeRoles(["admin"]),
-    validateFields(["nombre", "email", "rol"]), // Validación de campos obligatorios
+    validateFields(["nombre", "email", "rol"]),
     async (req, res) => {
         const { id } = req.params;
         const { nombre, email, rol } = req.body;
@@ -242,10 +227,6 @@ app.delete(
     },
 );
 
-//////////////////////////
-// CRUD OrdenCompra
-//////////////////////////
-
 app.get(
     "/ordencompras",
     authenticateJWT,
@@ -270,7 +251,7 @@ app.post(
         "Total",
         "CodLab",
         "NrofacturaProv",
-    ]), // Validación de campos obligatorios
+    ]),
     async (req, res) => {
         const { fechaEmision, Situacion, Total, CodLab, NrofacturaProv } =
             req.body;
@@ -299,7 +280,7 @@ app.put(
         "Total",
         "CodLab",
         "NrofacturaProv",
-    ]), // Validación de campos obligatorios
+    ]),
     async (req, res) => {
         const { id } = req.params;
         const { fechaEmision, Situacion, Total, CodLab, NrofacturaProv } =
@@ -341,10 +322,6 @@ app.delete(
     },
 );
 
-//////////////////////////
-// CRUD OrdenVenta
-//////////////////////////
-
 app.get(
     "/ordenventas",
     authenticateJWT,
@@ -363,7 +340,7 @@ app.post(
     "/ordenventas",
     authenticateJWT,
     authorizeRoles(["admin"]),
-    validateFields(["fechaEmision", "Motivo", "Situacion"]), // Validación de campos obligatorios
+    validateFields(["fechaEmision", "Motivo", "Situacion"]),
     async (req, res) => {
         const { fechaEmision, Motivo, Situacion } = req.body;
         try {
@@ -383,7 +360,7 @@ app.put(
     "/ordenventas/:id",
     authenticateJWT,
     authorizeRoles(["admin"]),
-    validateFields(["fechaEmision", "Motivo", "Situacion"]), // Validación de campos obligatorios
+    validateFields(["fechaEmision", "Motivo", "Situacion"]),
     async (req, res) => {
         const { id } = req.params;
         const { fechaEmision, Motivo, Situacion } = req.body;
@@ -421,10 +398,6 @@ app.delete(
         }
     },
 );
-
-//////////////////////////
-// Puerto
-//////////////////////////
 
 app.listen(3000, () => {
     console.log("Servidor corriend");
