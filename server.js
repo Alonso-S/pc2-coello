@@ -399,6 +399,6 @@ app.delete(
     },
 );
 
-app.listen(3000, () => {
-    console.log("Servidor corriend");
+app.listen(1000, "0.0.0.0", () => {
+    console.log("Servidor corriendo");
 });
